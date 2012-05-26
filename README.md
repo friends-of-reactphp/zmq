@@ -62,6 +62,13 @@ $pull->on('message', function ($msg) {
 $loop->run();
 ```
 
+## Todo
+
+* Integration tests
+* Buffer limiting
+* Do not push messages if no listener
+* Re-use react/event-loop buffer once it's migrated from socket
+
 ## Tests
 
 To run the test suite, you need PHPUnit.
