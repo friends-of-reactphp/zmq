@@ -5,6 +5,9 @@ php:
   - 5.4
 
 before_script:
+  - sudo apt-get install libzmq-dev
+  - sudo pecl install zmq
+  - echo "extension=zmq.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
 
