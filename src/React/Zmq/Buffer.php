@@ -59,10 +59,10 @@ class Buffer extends EventEmitter
                 if ($sent) {
                     unset($this->messages[$i]);
                     $this->loop->removeWriteStream($fd);
-                    $that->listening = false;
+                    $this->listening = false;
                 }
             } catch (\ZMQSocketException $e) {
-                $that->emit('error', array($e));
+                $this->emit('error', array($e));
             }
         }
     }
