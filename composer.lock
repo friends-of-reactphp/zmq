@@ -1,0 +1,24 @@
+{
+    "hash": "79cb5af3dbfcf10015c40406d50b3664",
+    "packages": [
+        {
+            "package": "evenement/evenement",
+            "version": "dev-master",
+            "source-reference": "b3b308f4b124e643bb632e0a3cf5944894b7d952"
+        },
+        {
+            "package": "react/event-loop",
+            "version": "dev-master",
+            "source-reference": "76db13526c13e266f71e4ddd541d08f08ed2f84e"
+        }
+    ],
+    "packages-dev": null,
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "evenement/evenement": 20,
+        "react/event-loop": 20
+    }
+}
