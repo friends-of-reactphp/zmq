@@ -6,7 +6,7 @@ php:
 
 before_script:
   - pear channel-discover pear.zero.mq
-  - sudo pecl install zmq
+  - pecl install zero.mq/zmq-beta
   - echo "extension=zmq.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install
