@@ -2,7 +2,7 @@
 
 ZeroMQ bindings for React.
 
-[![Build Status](https://secure.travis-ci.org/react-php/react.png)](http://travis-ci.org/react-php/react)
+[![Build Status](https://secure.travis-ci.org/react-php/zmq.png)](http://travis-ci.org/react-php/zmq)
 
 ## Install
 
@@ -11,7 +11,7 @@ The recommended way to install react is [through composer](http://getcomposer.or
 ```JSON
 {
     "require": {
-        "react/react": "dev-master"
+        "react/zmq": "dev-master"
     }
 }
 ```
