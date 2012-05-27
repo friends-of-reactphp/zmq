@@ -44,6 +44,7 @@ And the pull socket that goes with it:
 
 ```php
 <?php
+
 $loop = React\EventLoop\Factory::create();
 
 $context = new React\Zmq\Context($loop);
