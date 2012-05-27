@@ -28,8 +28,9 @@ class Context
     {
         $wrapped = new SocketWrapper($socket, $this->loop);
 
-        $fd = $socket->getSockOpt(\ZMQ::SOCKOPT_FD);
-        $this->loop->addReadStream($fd, function ($fd) use ($wrapped, $socket) {
+        $loop = $this->loop;
+
+        $this->loop->addReadStream($wrapped->fd, function ($fd) use ($wrapped, $socket, $loop) {
             while ($socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
                 $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
                 if (false !== $message) {

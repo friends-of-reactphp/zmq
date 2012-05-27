@@ -18,7 +18,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('send');
 
-        $buffer = new Buffer($socket, $loop);
+        $buffer = new Buffer($socket, 42, $loop);
         $buffer->send('foo');
     }
 
@@ -38,22 +38,22 @@ class BufferTest extends \PHPUnit_Framework_TestCase
 
         $socket = $this->getMockBuilder('ZMQSocket')->disableOriginalConstructor()->getMock();
         $socket
-            ->expects($this->at(1))
+            ->expects($this->at(0))
             ->method('getSockOpt')
             ->with(\ZMQ::SOCKOPT_EVENTS)
             ->will($this->returnValue(\ZMQ::POLL_OUT));
         $socket
-            ->expects($this->at(3))
+            ->expects($this->at(1))
             ->method('send')
             ->with('foo', \ZMQ::MODE_DONTWAIT)
             ->will($this->returnSelf());
         $socket
-            ->expects($this->at(4))
+            ->expects($this->at(2))
             ->method('send')
             ->with('bar', \ZMQ::MODE_DONTWAIT)
             ->will($this->returnSelf());
 
-        $buffer = new Buffer($socket, $loop);
+        $buffer = new Buffer($socket, 42, $loop);
         $buffer->send('foo');
         $buffer->send('bar');
 

@@ -66,4 +66,23 @@ class SocketWrapperTest extends \PHPUnit_Framework_TestCase
         $wrapped = new SocketWrapper($socket, $loop);
         $wrapped->send('foobar');
     }
+
+    public function testCloseShouldStopListening()
+    {
+        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop
+            ->expects($this->once())
+            ->method('removeStream')
+            ->with(14);
+
+        $socket = $this->getMockBuilder('ZMQSocket')->disableOriginalConstructor()->getMock();
+        $socket
+            ->expects($this->any())
+            ->method('getSockOpt')
+            ->with(\ZMQ::SOCKOPT_FD)
+            ->will($this->returnValue(14));
+
+        $wrapped = new SocketWrapper($socket, $loop);
+        $wrapped->close();
+    }
 }

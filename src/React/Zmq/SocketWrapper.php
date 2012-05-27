@@ -7,6 +7,8 @@ use React\EventLoop\LoopInterface;
 
 class SocketWrapper extends EventEmitter
 {
+    public $fd;
+    public $closed = false;
     private $socket;
     private $loop;
     private $buffer;
@@ -16,8 +18,8 @@ class SocketWrapper extends EventEmitter
         $this->socket = $socket;
         $this->loop = $loop;
 
-        $fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
-        $this->buffer = new Buffer($socket, $this->loop);
+        $this->fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
+        $this->buffer = new Buffer($socket, $this->fd, $this->loop);
     }
 
     public function getWrappedSocket()
@@ -38,6 +40,35 @@ class SocketWrapper extends EventEmitter
     public function send($message)
     {
         $this->buffer->send($message);
+    }
+
+    public function close()
+    {
+        if ($this->closed) {
+            return;
+        }
+
+        $this->emit('end', array($this));
+        $this->loop->removeStream($this->fd);
+        $this->buffer->removeAllListeners();
+        $this->removeAllListeners();
+        unset($this->socket);
+        $this->closed = true;
+    }
+
+    public function end()
+    {
+        if ($this->closed) {
+            return;
+        }
+
+        $that = $this;
+
+        $this->buffer->on('end', function () use ($that) {
+            $that->close();
+        });
+
+        $this->buffer->end();
     }
 
     public function __call($method, $args)

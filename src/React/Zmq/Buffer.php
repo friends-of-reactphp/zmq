@@ -11,11 +11,13 @@ class Buffer extends EventEmitter
     public $closed = false;
     public $listening = false;
     private $loop;
+    private $fd;
     private $messages = array();
 
-    public function __construct(\ZMQSocket $socket, LoopInterface $loop)
+    public function __construct(\ZMQSocket $socket, $fd, LoopInterface $loop)
     {
         $this->socket = $socket;
+        $this->fd = $fd;
         $this->loop = $loop;
     }
 
@@ -28,14 +30,13 @@ class Buffer extends EventEmitter
         $this->messages[] = $message;
 
         if (!$this->listening) {
-            $fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
             $that = $this;
             $listener = function () use ($that) {
                 if ($that->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
                     $that->handleWrite();
                 }
             };
-            $this->loop->addWriteStream($fd, $listener);
+            $this->loop->addWriteStream($this->fd, $listener);
 
             $this->listening = true;
         }
@@ -52,14 +53,16 @@ class Buffer extends EventEmitter
 
     public function handleWrite()
     {
-        $fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
         foreach ($this->messages as $i => $message) {
             try {
                 $sent = (bool) $this->socket->send($message, \ZMQ::MODE_DONTWAIT);
                 if ($sent) {
                     unset($this->messages[$i]);
-                    $this->loop->removeWriteStream($fd);
-                    $this->listening = false;
+                    if (0 === count($this->messages)) {
+                        $this->loop->removeWriteStream($this->fd);
+                        $this->listening = false;
+                        $this->emit('end');
+                    }
                 }
             } catch (\ZMQSocketException $e) {
                 $this->emit('error', array($e));
