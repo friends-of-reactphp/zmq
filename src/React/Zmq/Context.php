@@ -28,17 +28,24 @@ class Context
     {
         $wrapped = new SocketWrapper($socket, $this->loop);
 
-        $loop = $this->loop;
-
-        $this->loop->addReadStream($wrapped->fd, function ($fd) use ($wrapped, $socket, $loop) {
-            while ($socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
-                $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
-                if (false !== $message) {
-                    $wrapped->emit('message', array($message));
-                }
-            }
-        });
+        if ($this->isReadableSocketType($socket->getSocketType())) {
+            $wrapped->attachReadListener();
+        }
 
         return $wrapped;
+    }
+
+    private function isReadableSocketType($type)
+    {
+        $readableTypes = array(
+            \ZMQ::SOCKET_PULL,
+            \ZMQ::SOCKET_SUB,
+            \ZMQ::SOCKET_REQ,
+            \ZMQ::SOCKET_REP,
+            \ZMQ::SOCKET_ROUTER,
+            \ZMQ::SOCKET_DEALER,
+        );
+
+        return in_array($type, $readableTypes);
     }
 }

@@ -22,6 +22,22 @@ class SocketWrapper extends EventEmitter
         $this->buffer = new Buffer($socket, $this->fd, $this->loop);
     }
 
+    public function attachReadListener()
+    {
+        $that = $this;
+        $socket = $this->socket;
+        $loop = $this->loop;
+
+        $this->loop->addReadStream($this->fd, function ($fd) use ($that, $socket, $loop) {
+            while ($socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
+                $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
+                if (false !== $message) {
+                    $that->emit('message', array($message));
+                }
+            }
+        });
+    }
+
     public function getWrappedSocket()
     {
         return $this->socket;

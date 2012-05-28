@@ -40,4 +40,15 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $context = new Context($loop);
         $socket = $context->getSocket(\ZMQ::SOCKET_PULL);
     }
+
+    public function testShouldNotAddReadListenerForNonReadableSocketType()
+    {
+        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop
+            ->expects($this->never())
+            ->method('addReadStream');
+
+        $context = new Context($loop);
+        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH);
+    }
 }
