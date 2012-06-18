@@ -1,4 +1,4 @@
-# React-ZMQ
+# React/ZMQ
 
 ZeroMQ bindings for React.
 
