@@ -2,7 +2,7 @@
 
 ZeroMQ bindings for React.
 
-[![Build Status](https://secure.travis-ci.org/react-php/zmq.png)](http://travis-ci.org/react-php/zmq)
+[![Build Status](https://secure.travis-ci.org/react-php/zmq.png?branch=master)](http://travis-ci.org/react-php/zmq)
 
 ## Install
 
