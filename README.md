@@ -6,7 +6,7 @@ ZeroMQ bindings for React.
 
 ## Install
 
-The recommended way to install react is [through composer](http://getcomposer.org).
+The recommended way to install react/zmq is [through composer](http://getcomposer.org).
 
 ```JSON
 {
