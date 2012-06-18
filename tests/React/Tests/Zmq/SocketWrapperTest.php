@@ -54,7 +54,7 @@ class SocketWrapperTest extends \PHPUnit_Framework_TestCase
         $loop
             ->expects($this->once())
             ->method('addWriteStream')
-            ->with(14, $this->isInstanceOf('Closure'));
+            ->with(14);
 
         $socket = $this->getMockBuilder('ZMQSocket')->disableOriginalConstructor()->getMock();
         $socket

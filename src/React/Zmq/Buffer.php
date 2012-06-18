@@ -30,14 +30,7 @@ class Buffer extends EventEmitter
         $this->messages[] = $message;
 
         if (!$this->listening) {
-            $that = $this;
-            $listener = function () use ($that) {
-                if ($that->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
-                    $that->handleWrite();
-                }
-            };
-            $this->loop->addWriteStream($this->fd, $listener);
-
+            $this->loop->addWriteStream($this->fd, array($this, 'handleWrite'));
             $this->listening = true;
         }
     }
@@ -53,6 +46,10 @@ class Buffer extends EventEmitter
 
     public function handleWrite()
     {
+        if (!$this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
+            return;
+        }
+
         foreach ($this->messages as $i => $message) {
             try {
                 $sent = (bool) $this->socket->send($message, \ZMQ::MODE_DONTWAIT);

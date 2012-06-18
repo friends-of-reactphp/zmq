@@ -32,7 +32,7 @@ class BufferTest extends \PHPUnit_Framework_TestCase
             ->method('addWriteStream')
             ->will($this->returnCallback(function ($stream, $listener) use (&$writeListener) {
                 $writeListener = function () use ($stream, $listener) {
-                    return $listener($stream);
+                    return call_user_func($listener, $stream);
                 };
             }));
 
