@@ -1,15 +1,15 @@
 {
-    "hash": "79cb5af3dbfcf10015c40406d50b3664",
+    "hash": "f829f031bb1b1b5f4feeaad64ca94dbb",
     "packages": [
         {
             "package": "evenement/evenement",
-            "version": "dev-master",
-            "source-reference": "b3b308f4b124e643bb632e0a3cf5944894b7d952"
+            "version": "1.0.x-dev",
+            "source-reference": "v1.0.0"
         },
         {
             "package": "react/event-loop",
             "version": "dev-master",
-            "source-reference": "76db13526c13e266f71e4ddd541d08f08ed2f84e"
+            "source-reference": "0927a2129394f10cc8534994271c6073ca9e350c"
         }
     ],
     "packages-dev": null,
@@ -18,7 +18,6 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "evenement/evenement": 20,
         "react/event-loop": 20
     }
 }
