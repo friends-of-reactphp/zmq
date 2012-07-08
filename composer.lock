@@ -3,9 +3,7 @@
     "packages": [
         {
             "package": "evenement/evenement",
-            "version": "1.0.x-dev",
-            "source-reference": "v1.0.0",
-            "commit-date": "1338390068"
+            "version": "v1.0.0"
         },
         {
             "package": "react/event-loop",
