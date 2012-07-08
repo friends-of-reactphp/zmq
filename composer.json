@@ -10,6 +10,6 @@
         "react/event-loop": "dev-master"
     },
     "autoload": {
-        "psr-0": { "React\\Zmq": "src" }
+        "psr-0": { "React\\ZMQ": "src" }
     }
 }

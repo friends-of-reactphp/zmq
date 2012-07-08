@@ -1,8 +1,8 @@
 <?php
 
-namespace React\Tests\Zmq;
+namespace React\Tests\ZMQ;
 
-use React\Zmq\SocketWrapper;
+use React\ZMQ\SocketWrapper;
 
 class SocketWrapperTest extends \PHPUnit_Framework_TestCase
 {

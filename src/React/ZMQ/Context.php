@@ -1,6 +1,6 @@
 <?php
 
-namespace React\Zmq;
+namespace React\ZMQ;
 
 use React\EventLoop\LoopInterface;
 

@@ -4,7 +4,7 @@ require __DIR__.'/../vendor/autoload.php';
 
 $loop = React\EventLoop\Factory::create();
 
-$context = new React\Zmq\Context($loop);
+$context = new React\ZMQ\Context($loop);
 
 $push = $context->getSocket(ZMQ::SOCKET_PUSH);
 $push->connect('tcp://127.0.0.1:5555');

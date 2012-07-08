@@ -1,8 +1,8 @@
 <?php
 
-namespace React\Tests\Zmq;
+namespace React\Tests\ZMQ;
 
-use React\Zmq\Context;
+use React\ZMQ\Context;
 
 class ContextTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $context = new Context($loop);
         $socket = $context->getSocket(\ZMQ::SOCKET_PULL);
 
-        $this->assertInstanceOf('React\Zmq\SocketWrapper', $socket);
+        $this->assertInstanceOf('React\ZMQ\SocketWrapper', $socket);
     }
 
     public function testShouldAddReadListener()
