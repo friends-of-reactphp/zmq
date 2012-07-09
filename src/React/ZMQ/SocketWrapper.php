@@ -32,7 +32,17 @@ class SocketWrapper extends EventEmitter
             while ($socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
                 $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
                 if (false !== $message) {
-                    $that->emit('message', array($message));
+                    if ($socket->getSockOpt(\ZMQ::SOCKOPT_RCVMORE)) {
+                        $messages = array($message);
+                        while ($socket->getSockOpt(\ZMQ::SOCKOPT_RCVMORE)) {
+                            $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
+                            $messages[] = $message;
+                        }
+
+                        $that->emit('message', array($messages));
+                    } else {
+                        $that->emit('message', array($message));
+                    }
                 }
             }
         });
