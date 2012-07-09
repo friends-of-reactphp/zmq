@@ -24,28 +24,21 @@ class SocketWrapper extends EventEmitter
 
     public function attachReadListener()
     {
-        $that = $this;
-        $socket = $this->socket;
-        $loop = $this->loop;
+        $this->loop->addReadStream($this->fd, array($this, 'handleData'));
+    }
 
-        $this->loop->addReadStream($this->fd, function ($fd) use ($that, $socket, $loop) {
-            while ($socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
-                $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
-                if (false !== $message) {
-                    if ($socket->getSockOpt(\ZMQ::SOCKOPT_RCVMORE)) {
-                        $messages = array($message);
-                        while ($socket->getSockOpt(\ZMQ::SOCKOPT_RCVMORE)) {
-                            $message = $socket->recv(\ZMQ::MODE_DONTWAIT);
-                            $messages[] = $message;
-                        }
-
-                        $that->emit('message', array($messages));
-                    } else {
-                        $that->emit('message', array($message));
-                    }
+    public function handleData($fd)
+    {
+        while ($this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
+            $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
+            if (false !== $messages) {
+                if (count($messages) > 1) {
+                    $this->emit('message', array($messages));
+                } else {
+                    $this->emit('message', array($messages[0]));
                 }
             }
-        });
+        }
     }
 
     public function getWrappedSocket()
