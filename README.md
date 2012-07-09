@@ -68,7 +68,6 @@ $loop->run();
 * Integration tests
 * Buffer limiting
 * Do not push messages if no listener
-* Re-use react/event-loop buffer once it's migrated from socket
 
 ## Tests
 
