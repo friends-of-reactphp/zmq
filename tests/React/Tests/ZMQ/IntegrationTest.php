@@ -41,14 +41,16 @@ class IntergrationTest extends \PHPUnit_Framework_TestCase
 
     public function testDealerRep()
     {
-        $this->forkRepWorker();
-        $this->forkRepWorker();
+        $pids[] = $this->forkRepWorker();
+        $pids[] = $this->forkRepWorker();
 
         $loop = new StreamSelectLoop();
         $context = new Context($loop);
 
         $dealer = $context->getSocket(\ZMQ::SOCKET_DEALER);
         $dealer->bind('ipc://test2.ipc');
+
+        sleep(1);
 
         $msgs = array();
 
@@ -57,9 +59,7 @@ class IntergrationTest extends \PHPUnit_Framework_TestCase
         });
 
         $dealer->send(array('A', '', 'foo'));
-        $loop->addTimer(0.5, function () use ($dealer) {
-            $dealer->send(array('B', '', 'bar'));
-        });
+        $dealer->send(array('B', '', 'bar'));
 
         $loop->addTimer(1, function () use ($loop) {
             $loop->stop();
@@ -67,18 +67,20 @@ class IntergrationTest extends \PHPUnit_Framework_TestCase
 
         $loop->run();
 
-        $expected = array(
-            array('A', '', 'foobar'),
-            array('B', '', 'barbar'),
-        );
-        $this->assertSame($expected, $msgs);
+        foreach ($pids as $pid) {
+            pcntl_waitpid($pid, $status, WUNTRACED);
+        }
+
+        $this->assertCount(2, $msgs);
+        $this->assertContains(array('A', '', 'foobar'), $msgs);
+        $this->assertContains(array('B', '', 'barbar'), $msgs);
     }
 
     private function forkRepWorker()
     {
         $pid = pcntl_fork();
         if ($pid != 0) {
-            return;
+            return $pid;
         }
 
         $context = new \ZMQContext();
