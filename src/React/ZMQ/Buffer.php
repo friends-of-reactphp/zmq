@@ -66,5 +66,7 @@ class Buffer extends EventEmitter
                 $this->emit('error', array($e));
             }
         }
+
+        $this->emit('written');
     }
 }

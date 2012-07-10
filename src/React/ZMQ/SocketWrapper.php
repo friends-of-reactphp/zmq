@@ -19,7 +19,9 @@ class SocketWrapper extends EventEmitter
         $this->loop = $loop;
 
         $this->fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
+
         $this->buffer = new Buffer($socket, $this->fd, $this->loop);
+        $this->buffer->on('written', array($this, 'handleData'));
     }
 
     public function attachReadListener()
@@ -27,9 +29,13 @@ class SocketWrapper extends EventEmitter
         $this->loop->addReadStream($this->fd, array($this, 'handleData'));
     }
 
-    public function handleData($fd)
+    public function handleData()
     {
+        $read = false;
+
         while ($this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
+            $read = true;
+
             $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
             if (false !== $messages) {
                 if (count($messages) > 1) {
@@ -38,6 +44,10 @@ class SocketWrapper extends EventEmitter
                     $this->emit('message', array($messages[0]));
                 }
             }
+        }
+
+        if ($read && $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
+            $this->buffer->handleWrite();
         }
     }
 
