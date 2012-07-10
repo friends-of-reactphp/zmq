@@ -5,7 +5,7 @@ namespace React\Tests\ZMQ;
 use React\EventLoop\StreamSelectLoop;
 use React\ZMQ\Context;
 
-class IntergrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends \PHPUnit_Framework_TestCase
 {
     public function testPushPull()
     {
