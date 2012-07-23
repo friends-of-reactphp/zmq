@@ -1,0 +1,7 @@
+{
+    "minimum-stability": "dev",
+    "require": {
+        "react/http": "dev-master",
+        "react/zmq": "dev-master"
+    }
+}

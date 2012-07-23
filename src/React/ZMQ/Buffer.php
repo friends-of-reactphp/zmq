@@ -30,8 +30,8 @@ class Buffer extends EventEmitter
         $this->messages[] = $message;
 
         if (!$this->listening) {
-            $this->loop->addWriteStream($this->fd, array($this, 'handleWrite'));
             $this->listening = true;
+            $this->loop->addWriteStream($this->fd, array($this, 'handleWrite'));
         }
     }
 
@@ -52,7 +52,8 @@ class Buffer extends EventEmitter
 
         foreach ($this->messages as $i => $message) {
             try {
-                $sent = (bool) $this->socket->send($message, \ZMQ::MODE_DONTWAIT);
+                $message = !is_array($message) ? array($message) : $message;
+                $sent = (bool) $this->socket->sendmulti($message, \ZMQ::MODE_NOBLOCK);
                 if ($sent) {
                     unset($this->messages[$i]);
                     if (0 === count($this->messages)) {
@@ -65,5 +66,7 @@ class Buffer extends EventEmitter
                 $this->emit('error', array($e));
             }
         }
+
+        $this->emit('written');
     }
 }
