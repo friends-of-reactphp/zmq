@@ -44,13 +44,13 @@ class BufferTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\ZMQ::POLL_OUT));
         $socket
             ->expects($this->at(1))
-            ->method('send')
-            ->with('foo', \ZMQ::MODE_DONTWAIT)
+            ->method('sendmulti')
+            ->with(array('foo'), \ZMQ::MODE_DONTWAIT)
             ->will($this->returnSelf());
         $socket
             ->expects($this->at(2))
-            ->method('send')
-            ->with('bar', \ZMQ::MODE_DONTWAIT)
+            ->method('sendmulti')
+            ->with(array('bar'), \ZMQ::MODE_DONTWAIT)
             ->will($this->returnSelf());
 
         $buffer = new Buffer($socket, 42, $loop);
