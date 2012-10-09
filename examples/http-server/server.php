@@ -15,6 +15,10 @@ $conns = new ArrayObject();
 $dealer->on('message', function ($msg) use ($conns) {
     list($hash, $blank, $data) = $msg;
 
+    if (!isset($conns[$hash])) {
+        return;
+    }
+
     $response = $conns[$hash];
     $response->writeHead();
     $response->end($data);
