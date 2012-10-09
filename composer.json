@@ -7,7 +7,7 @@
         "php": ">=5.3.2",
         "ext-zmq": "*",
         "evenement/evenement": "1.0.*",
-        "react/event-loop": "0.1.*"
+        "react/event-loop": "0.2.*"
     },
     "require-dev": {
         "ext-pcntl": "*"

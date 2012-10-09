@@ -1,15 +1,87 @@
 {
-    "hash": "774baa27ae0766d6b0800e4395825019",
+    "hash": "7e3831d3d95c8e5ff217c7babc2ba654",
     "packages": [
         {
-            "package": "evenement/evenement",
-            "version": "v1.0.0"
+            "name": "evenement/evenement",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/igorw/evenement",
+                "reference": "v1.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/igorw/evenement/zipball/v1.0.0",
+                "reference": "v1.0.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2012-05-30 15:01:08",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Evenement": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Igor Wiedler",
+                    "email": "igor@wiedler.ch",
+                    "homepage": "http://wiedler.ch/igor/"
+                }
+            ],
+            "description": "Événement is a very simple event dispatching library for PHP 5.3",
+            "keywords": [
+                "event-dispatcher"
+            ]
         },
         {
-            "package": "react/event-loop",
-            "version": "dev-master",
-            "source-reference": "0927a2129394f10cc8534994271c6073ca9e350c",
-            "commit-date": "1337810634"
+            "name": "react/event-loop",
+            "version": "v0.2.0",
+            "target-dir": "React/EventLoop",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/react-php/event-loop.git",
+                "reference": "v0.2.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/react-php/event-loop/zipball/v0.2.0",
+                "reference": "v0.2.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "suggest": {
+                "ext-libevent": ">=0.0.5"
+            },
+            "time": "2012-09-10 12:53:22",
+            "type": "library",
+            "extra": {
+                "branch-alias": [
+
+                ]
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "React\\EventLoop": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Event loop abstraction layer that libraries can use for evented I/O.",
+            "keywords": [
+                "event-loop"
+            ]
         }
     ],
     "packages-dev": null,
@@ -17,7 +89,7 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "react/event-loop": 20
-    }
+    "stability-flags": [
+
+    ]
 }
