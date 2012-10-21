@@ -1,5 +1,5 @@
 {
-    "hash": "7e3831d3d95c8e5ff217c7babc2ba654",
+    "hash": "250a7d74361c5053f4b1e86f1d876055",
     "packages": [
         {
             "name": "evenement/evenement",
@@ -43,17 +43,17 @@
         },
         {
             "name": "react/event-loop",
-            "version": "v0.2.0",
+            "version": "v0.2.1",
             "target-dir": "React/EventLoop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/react-php/event-loop.git",
-                "reference": "v0.2.0"
+                "reference": "v0.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/react-php/event-loop/zipball/v0.2.0",
-                "reference": "v0.2.0",
+                "url": "https://github.com/react-php/event-loop/zipball/v0.2.1",
+                "reference": "v0.2.1",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
             "suggest": {
                 "ext-libevent": ">=0.0.5"
             },
-            "time": "2012-09-10 12:53:22",
+            "time": "2012-09-10 05:53:22",
             "type": "library",
             "extra": {
                 "branch-alias": [
@@ -84,7 +84,9 @@
             ]
         }
     ],
-    "packages-dev": null,
+    "packages-dev": [
+
+    ],
     "aliases": [
 
     ],
