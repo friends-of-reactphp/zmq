@@ -11,7 +11,7 @@ The recommended way to install react/zmq is [through composer](http://getcompose
 ```JSON
 {
     "require": {
-        "react/zmq": "dev-master"
+        "react/zmq": "0.1.*"
     }
 }
 ```
