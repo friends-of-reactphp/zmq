@@ -31,11 +31,9 @@ class SocketWrapper extends EventEmitter
 
     public function handleData()
     {
-        $read = false;
+        $events = $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS);
 
-        while ($this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_IN) {
-            $read = true;
-
+        while ($events & \ZMQ::POLL_IN) {
             $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
             if (false !== $messages) {
                 if (count($messages) > 1) {
@@ -46,7 +44,7 @@ class SocketWrapper extends EventEmitter
             }
         }
 
-        if ($read && $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
+        if ($events & \ZMQ::POLL_OUT) {
             $this->buffer->handleWrite();
         }
     }

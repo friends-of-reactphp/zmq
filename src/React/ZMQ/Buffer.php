@@ -46,7 +46,12 @@ class Buffer extends EventEmitter
 
     public function handleWrite()
     {
-        if (!$this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
+        $events = $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS);
+
+        if (!$events & \ZMQ::POLL_OUT) {
+            if ($events & \ZMQ::POLL_IN) {
+                $this->emit('written');
+            }
             return;
         }
 
