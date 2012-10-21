@@ -20,32 +20,44 @@ class SocketWrapper extends EventEmitter
 
         $this->fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
 
-        $this->buffer = new Buffer($socket, $this->fd, $this->loop);
-        $this->buffer->on('written', array($this, 'handleData'));
+        $writeListener = array($this, 'handleEvent');
+        $this->buffer = new Buffer($socket, $this->fd, $this->loop, $writeListener);
     }
 
     public function attachReadListener()
     {
-        $this->loop->addReadStream($this->fd, array($this, 'handleData'));
+        $this->loop->addReadStream($this->fd, array($this, 'handleEvent'));
     }
 
-    public function handleData()
+    public function handleEvent()
     {
-        $events = $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS);
+        while (true) {
+            $events = $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS);
 
-        while ($events & \ZMQ::POLL_IN) {
-            $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
-            if (false !== $messages) {
-                if (count($messages) > 1) {
-                    $this->emit('message', array($messages));
-                } else {
-                    $this->emit('message', array($messages[0]));
-                }
+            $hasEvents = ($events & \ZMQ::POLL_IN) || ($events & \ZMQ::POLL_OUT && $this->buffer->listening);
+            if (!$hasEvents) {
+                break;
+            }
+
+            if ($events & \ZMQ::POLL_IN) {
+                $this->handleReadEvent();
+            }
+
+            if ($events & \ZMQ::POLL_OUT && $this->buffer->listening) {
+                $this->buffer->handleWriteEvent();
             }
         }
+    }
 
-        if ($events & \ZMQ::POLL_OUT) {
-            $this->buffer->handleWrite();
+    public function handleReadEvent()
+    {
+        $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
+        if (false !== $messages) {
+            if (count($messages) > 1) {
+                $this->emit('message', array($messages));
+            } else {
+                $this->emit('message', array($messages[0]));
+            }
         }
     }
 
