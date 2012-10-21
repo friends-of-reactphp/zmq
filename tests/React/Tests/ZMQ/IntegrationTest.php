@@ -41,8 +41,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
     public function testDealerRep()
     {
-        $this->markTestIncomplete('Failing due to php-zmq fork bug. See: https://github.com/mkoppanen/php-zmq/issues/59.');
-
         $pids[] = $this->forkRepWorker();
         $pids[] = $this->forkRepWorker();
 
