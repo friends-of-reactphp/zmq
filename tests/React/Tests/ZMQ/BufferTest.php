@@ -18,46 +18,38 @@ class BufferTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('send');
 
-        $buffer = new Buffer($socket, 42, $loop);
+        $writeListener = function () {};
+
+        $buffer = new Buffer($socket, 42, $loop, $writeListener);
         $buffer->send('foo');
     }
 
     public function testLoopShouldSendQueuedMessages()
     {
-        $writeListener = null;
+        $writeListener = function () {};
 
         $loop = $this->getMock('React\EventLoop\LoopInterface');
         $loop
             ->expects($this->once())
             ->method('addWriteStream')
-            ->will($this->returnCallback(function ($stream, $listener) use (&$writeListener) {
-                $writeListener = function () use ($stream, $listener) {
-                    return call_user_func($listener, $stream);
-                };
-            }));
+            ->with($this->isType('integer'), $writeListener);
 
         $socket = $this->getMockBuilder('ZMQSocket')->disableOriginalConstructor()->getMock();
         $socket
             ->expects($this->at(0))
-            ->method('getSockOpt')
-            ->with(\ZMQ::SOCKOPT_EVENTS)
-            ->will($this->returnValue(\ZMQ::POLL_OUT));
-        $socket
-            ->expects($this->at(1))
             ->method('sendmulti')
             ->with(array('foo'), \ZMQ::MODE_DONTWAIT)
             ->will($this->returnSelf());
         $socket
-            ->expects($this->at(2))
+            ->expects($this->at(1))
             ->method('sendmulti')
             ->with(array('bar'), \ZMQ::MODE_DONTWAIT)
             ->will($this->returnSelf());
 
-        $buffer = new Buffer($socket, 42, $loop);
+        $buffer = new Buffer($socket, 42, $loop, $writeListener);
         $buffer->send('foo');
         $buffer->send('bar');
 
-        $this->assertNotNull($writeListener);
-        $writeListener();
+        $buffer->handleWriteEvent();
     }
 }

@@ -12,13 +12,15 @@ class Buffer extends EventEmitter
     public $listening = false;
     private $loop;
     private $fd;
+    private $writeListener;
     private $messages = array();
 
-    public function __construct(\ZMQSocket $socket, $fd, LoopInterface $loop)
+    public function __construct(\ZMQSocket $socket, $fd, LoopInterface $loop, $writeListener)
     {
         $this->socket = $socket;
         $this->fd = $fd;
         $this->loop = $loop;
+        $this->writeListener = $writeListener;
     }
 
     public function send($message)
@@ -31,7 +33,7 @@ class Buffer extends EventEmitter
 
         if (!$this->listening) {
             $this->listening = true;
-            $this->loop->addWriteStream($this->fd, array($this, 'handleWrite'));
+            $this->loop->addWriteStream($this->fd, $this->writeListener);
         }
     }
 
@@ -44,12 +46,8 @@ class Buffer extends EventEmitter
         }
     }
 
-    public function handleWrite()
+    public function handleWriteEvent()
     {
-        if (!$this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS) & \ZMQ::POLL_OUT) {
-            return;
-        }
-
         foreach ($this->messages as $i => $message) {
             try {
                 $message = !is_array($message) ? array($message) : $message;
@@ -66,7 +64,5 @@ class Buffer extends EventEmitter
                 $this->emit('error', array($e));
             }
         }
-
-        $this->emit('written');
     }
 }
