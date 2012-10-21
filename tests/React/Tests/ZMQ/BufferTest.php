@@ -6,7 +6,8 @@ use React\ZMQ\Buffer;
 
 class BufferTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSendShouldQueueMessages()
+    /** @test */
+    public function sendShouldQueueMessages()
     {
         $loop = $this->getMock('React\EventLoop\LoopInterface');
         $loop
@@ -24,7 +25,8 @@ class BufferTest extends \PHPUnit_Framework_TestCase
         $buffer->send('foo');
     }
 
-    public function testLoopShouldSendQueuedMessages()
+    /** @test */
+    public function loopShouldSendQueuedMessages()
     {
         $writeListener = function () {};
 
