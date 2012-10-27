@@ -18,7 +18,7 @@
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2012-05-30 15:01:08",
+            "time": "2012-05-30 08:01:08",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -47,12 +47,12 @@
             "target-dir": "React/EventLoop",
             "source": {
                 "type": "git",
-                "url": "https://github.com/react-php/event-loop.git",
+                "url": "https://github.com/reactphp/event-loop",
                 "reference": "v0.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/react-php/event-loop/zipball/v0.2.1",
+                "url": "https://github.com/reactphp/event-loop/zipball/v0.2.1",
                 "reference": "v0.2.1",
                 "shasum": ""
             },
