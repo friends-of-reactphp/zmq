@@ -43,31 +43,32 @@
         },
         {
             "name": "react/event-loop",
-            "version": "v0.2.1",
+            "version": "v0.2.3",
             "target-dir": "React/EventLoop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop",
-                "reference": "v0.2.1"
+                "reference": "v0.2.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/reactphp/event-loop/zipball/v0.2.1",
-                "reference": "v0.2.1",
+                "url": "https://github.com/reactphp/event-loop/archive/v0.2.3.zip",
+                "reference": "v0.2.3",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "suggest": {
-                "ext-libevent": ">=0.0.5"
+                "ext-libevent": ">=0.0.5",
+                "ext-libev": "*"
             },
-            "time": "2012-09-10 05:53:22",
+            "time": "2012-11-12 23:00:05",
             "type": "library",
             "extra": {
-                "branch-alias": [
-
-                ]
+                "branch-alias": {
+                    "dev-master": "0.2-dev"
+                }
             },
             "installation-source": "dist",
             "autoload": {
@@ -84,9 +85,7 @@
             ]
         }
     ],
-    "packages-dev": [
-
-    ],
+    "packages-dev": null,
     "aliases": [
 
     ],
