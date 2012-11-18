@@ -53,11 +53,10 @@ class SocketWrapper extends EventEmitter
     {
         $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
         if (false !== $messages) {
-            if (count($messages) > 1) {
-                $this->emit('message', array($messages));
-            } else {
+            if (1 === count($messages)) {
                 $this->emit('message', array($messages[0]));
             }
+            $this->emit('messages', array($messages));
         }
     }
 

@@ -54,7 +54,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $msgs = array();
 
-        $dealer->on('message', function ($msg) use (&$msgs) {
+        $dealer->on('messages', function ($msg) use (&$msgs) {
             $msgs[] = $msg;
         });
 

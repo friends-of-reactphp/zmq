@@ -12,7 +12,7 @@ $dealer->bind('tcp://127.0.0.1:4444');
 
 $conns = new ArrayObject();
 
-$dealer->on('message', function ($msg) use ($conns) {
+$dealer->on('messages', function ($msg) use ($conns) {
     list($hash, $blank, $data) = $msg;
 
     if (!isset($conns[$hash])) {
