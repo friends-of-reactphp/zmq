@@ -1,13 +1,11 @@
 <?php
 
-namespace React\Tests\ZMQ;
-
-use React\ZMQ\SocketWrapper;
+namespace React\ZMQ;
 
 class SocketWrapperTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
-    public function shouldWrapSocket()
+    public function itShouldWrapARealZMQSocket()
     {
         $loop = $this->getMock('React\EventLoop\LoopInterface');
 

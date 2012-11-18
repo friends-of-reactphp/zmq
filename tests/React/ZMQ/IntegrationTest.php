@@ -1,9 +1,8 @@
 <?php
 
-namespace React\Tests\ZMQ;
+namespace React\ZMQ;
 
 use React\EventLoop\StreamSelectLoop;
-use React\ZMQ\Context;
 
 class IntegrationTest extends \PHPUnit_Framework_TestCase
 {

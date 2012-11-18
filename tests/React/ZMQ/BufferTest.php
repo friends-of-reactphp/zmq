@@ -1,8 +1,6 @@
 <?php
 
-namespace React\Tests\ZMQ;
-
-use React\ZMQ\Buffer;
+namespace React\ZMQ;
 
 class BufferTest extends \PHPUnit_Framework_TestCase
 {
