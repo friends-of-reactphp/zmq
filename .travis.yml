@@ -7,7 +7,6 @@ php:
 before_script:
   - pear channel-discover pear.zero.mq
   - pecl install pear.zero.mq/zmq-beta
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install
+  - composer install --dev
 
 script: phpunit --coverage-text
