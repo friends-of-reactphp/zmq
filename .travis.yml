@@ -3,10 +3,12 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
 
 before_script:
-  - pear channel-discover pear.zero.mq
-  - pecl install pear.zero.mq/zmq-beta
+  - git clone https://github.com/mkoppanen/php-zmq.git
+  - sh -c "cd php-zmq && phpize && ./configure && make --silent && sudo make install"
+  - echo "extension=zmq.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - composer self-update
   - composer install --dev
 
