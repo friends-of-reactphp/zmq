@@ -18,6 +18,13 @@ The recommended way to install react/zmq is [through composer](http://getcompose
 
 ## Example
 
+And don't forget to autoload:
+
+```php
+<?php
+require 'vendor/autoload';
+```
+
 Here is an example of a push socket:
 
 ```php
