@@ -22,7 +22,7 @@ And don't forget to autoload:
 
 ```php
 <?php
-require 'vendor/autoload';
+require 'vendor/autoload.php';
 ```
 
 Here is an example of a push socket:
