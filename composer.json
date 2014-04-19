@@ -6,8 +6,8 @@
     "require": {
         "php": ">=5.3.2",
         "ext-zmq": "*",
-        "evenement/evenement": "~1.0",
-        "react/event-loop": "0.3.*"
+        "evenement/evenement": "~1.0|~2.0",
+        "react/event-loop": ">=0.3.0,<0.5-dev"
     },
     "require-dev": {
         "ext-pcntl": "*"
