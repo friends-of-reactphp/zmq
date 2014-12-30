@@ -8,12 +8,8 @@ ZeroMQ bindings for React.
 
 The recommended way to install react/zmq is [through composer](http://getcomposer.org).
 
-```JSON
-{
-    "require": {
-        "react/zmq": "0.2.*|0.3.*"
-    }
-}
+```bash
+composer require react/zmq
 ```
 
 ## Example
