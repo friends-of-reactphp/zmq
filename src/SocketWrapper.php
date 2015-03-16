@@ -4,46 +4,79 @@ namespace React\ZMQ;
 
 use Evenement\EventEmitter;
 use React\EventLoop\LoopInterface;
+use ZMQ;
+use ZMQSocket;
 
+/**
+ * @mixin ZMQSocket
+ */
 class SocketWrapper extends EventEmitter
 {
-    public $fd;
-    public $closed = false;
-    private $socket;
-    private $loop;
-    private $buffer;
+    /**
+     * @var resource
+     */
+    public $fileDescriptor;
 
-    public function __construct(\ZMQSocket $socket, LoopInterface $loop)
+    /**
+     * @var bool
+     */
+    public $closed = false;
+
+    /**
+     * @var ZMQSocket
+     */
+    protected $socket;
+
+    /**
+     * @var LoopInterface
+     */
+    protected $loop;
+
+    /**
+     * @var Buffer
+     */
+    protected $buffer;
+
+    /**
+     * @param ZMQSocket     $socket
+     * @param LoopInterface $loop
+     */
+    public function __construct(ZMQSocket $socket, LoopInterface $loop)
     {
         $this->socket = $socket;
         $this->loop = $loop;
 
-        $this->fd = $this->socket->getSockOpt(\ZMQ::SOCKOPT_FD);
+        $this->fileDescriptor = $this->socket->getSockOpt(ZMQ::SOCKOPT_FD);
 
         $writeListener = array($this, 'handleEvent');
-        $this->buffer = new Buffer($socket, $this->fd, $this->loop, $writeListener);
+
+        $this->buffer = new Buffer($socket, $this->fileDescriptor, $this->loop, $writeListener);
     }
 
     public function attachReadListener()
     {
-        $this->loop->addReadStream($this->fd, array($this, 'handleEvent'));
+        $this->loop->addReadStream($this->fileDescriptor, array($this, 'handleEvent'));
     }
 
     public function handleEvent()
     {
         while (true) {
-            $events = $this->socket->getSockOpt(\ZMQ::SOCKOPT_EVENTS);
+            $events = $this->socket->getSockOpt(ZMQ::SOCKOPT_EVENTS);
 
-            $hasEvents = ($events & \ZMQ::POLL_IN) || ($events & \ZMQ::POLL_OUT && $this->buffer->listening);
+            $isPollIn = $events & ZMQ::POLL_IN;
+            $isPollOut = $events & ZMQ::POLL_OUT;
+
+            $hasEvents = $isPollIn || ($isPollOut && $this->buffer->listening);
+
             if (!$hasEvents) {
                 break;
             }
 
-            if ($events & \ZMQ::POLL_IN) {
+            if ($isPollIn) {
                 $this->handleReadEvent();
             }
 
-            if ($events & \ZMQ::POLL_OUT && $this->buffer->listening) {
+            if ($isPollOut && $this->buffer->listening) {
                 $this->buffer->handleWriteEvent();
             }
         }
@@ -51,30 +84,44 @@ class SocketWrapper extends EventEmitter
 
     public function handleReadEvent()
     {
-        $messages = $this->socket->recvmulti(\ZMQ::MODE_NOBLOCK);
-        if (false !== $messages) {
-            if (1 === count($messages)) {
+        $messages = $this->socket->recvmulti(ZMQ::MODE_NOBLOCK);
+
+        if ($messages !== false) {
+            if (count($messages) === 1) {
                 $this->emit('message', array($messages[0]));
             }
+
             $this->emit('messages', array($messages));
         }
     }
 
+    /**
+     * @return ZMQSocket
+     */
     public function getWrappedSocket()
     {
         return $this->socket;
     }
 
+    /**
+     * @param string $channel
+     */
     public function subscribe($channel)
     {
-        $this->socket->setSockOpt(\ZMQ::SOCKOPT_SUBSCRIBE, $channel);
+        $this->socket->setSockOpt(ZMQ::SOCKOPT_SUBSCRIBE, $channel);
     }
 
+    /**
+     * @param string $channel
+     */
     public function unsubscribe($channel)
     {
-        $this->socket->setSockOpt(\ZMQ::SOCKOPT_UNSUBSCRIBE, $channel);
+        $this->socket->setSockOpt(ZMQ::SOCKOPT_UNSUBSCRIBE, $channel);
     }
 
+    /**
+     * @param string $message
+     */
     public function send($message)
     {
         $this->buffer->send($message);
@@ -87,7 +134,7 @@ class SocketWrapper extends EventEmitter
         }
 
         $this->emit('end', array($this));
-        $this->loop->removeStream($this->fd);
+        $this->loop->removeStream($this->fileDescriptor);
         $this->buffer->removeAllListeners();
         $this->removeAllListeners();
         unset($this->socket);
@@ -109,8 +156,14 @@ class SocketWrapper extends EventEmitter
         $this->buffer->end();
     }
 
-    public function __call($method, $args)
+    /**
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, array $parameters)
     {
-        return call_user_func_array(array($this->socket, $method), $args);
+        return call_user_func_array(array($this->socket, $method), $parameters);
     }
 }

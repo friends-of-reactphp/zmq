@@ -10,7 +10,8 @@
         "react/event-loop": "0.4.*"
     },
     "require-dev": {
-        "ext-pcntl": "*"
+        "ext-pcntl": "*",
+        "phpunit/phpunit": "~4.5"
     },
     "autoload": {
         "psr-4": {

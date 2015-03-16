@@ -3,28 +3,65 @@
 namespace React\ZMQ;
 
 use React\EventLoop\LoopInterface;
+use ZMQ;
+use ZMQContext;
+use ZMQSocket;
 
+/**
+ * @mixin ZMQContext
+ *
+ * @method SocketWrapper getSocket
+ */
 class Context
 {
-    private $loop;
-    private $context;
+    /**
+     * @var LoopInterface
+     */
+    protected $loop;
 
-    public function __construct(LoopInterface $loop, \ZMQContext $context = null)
+    /**
+     * @var ZMQContext
+     */
+    protected $context;
+
+    /**
+     * @param LoopInterface $loop
+     * @param ZMQContext    $context
+     */
+    public function __construct(LoopInterface $loop, ZMQContext $context = null)
     {
         $this->loop = $loop;
-        $this->context = $context ?: new \ZMQContext();
-    }
 
-    public function __call($method, $args)
-    {
-        $res = call_user_func_array(array($this->context, $method), $args);
-        if ($res instanceof \ZMQSocket) {
-            $res = $this->wrapSocket($res);
+        if (!$context) {
+            $context = new ZMQContext();
         }
-        return $res;
+
+        $this->context = $context;
     }
 
-    private function wrapSocket(\ZMQSocket $socket)
+    /**
+     * @param string $method
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, array $parameters)
+    {
+        $result = call_user_func_array(array($this->context, $method), $parameters);
+
+        if ($result instanceof ZMQSocket) {
+            $result = $this->wrapSocket($result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param ZMQSocket $socket
+     *
+     * @return SocketWrapper
+     */
+    protected function wrapSocket(ZMQSocket $socket)
     {
         $wrapped = new SocketWrapper($socket, $this->loop);
 
@@ -35,15 +72,20 @@ class Context
         return $wrapped;
     }
 
-    private function isReadableSocketType($type)
+    /**
+     * @param int $type
+     *
+     * @return bool
+     */
+    protected function isReadableSocketType($type)
     {
         $readableTypes = array(
-            \ZMQ::SOCKET_PULL,
-            \ZMQ::SOCKET_SUB,
-            \ZMQ::SOCKET_REQ,
-            \ZMQ::SOCKET_REP,
-            \ZMQ::SOCKET_ROUTER,
-            \ZMQ::SOCKET_DEALER,
+            ZMQ::SOCKET_PULL,
+            ZMQ::SOCKET_SUB,
+            ZMQ::SOCKET_REQ,
+            ZMQ::SOCKET_REP,
+            ZMQ::SOCKET_ROUTER,
+            ZMQ::SOCKET_DEALER,
         );
 
         return in_array($type, $readableTypes);
