@@ -2,25 +2,31 @@
 
 namespace React\ZMQ;
 
+use PHPUnit_Framework_TestCase;
 use React\EventLoop\StreamSelectLoop;
+use ZMQ;
+use ZMQContext;
 
-class IntegrationTest extends \PHPUnit_Framework_TestCase
+class IntegrationTest extends PHPUnit_Framework_TestCase
 {
-    public function testPushPull()
+    /**
+     * @test
+     */
+    public function pushPull()
     {
         $loop = new StreamSelectLoop();
         $context = new Context($loop);
 
-        $pull = $context->getSocket(\ZMQ::SOCKET_PULL);
+        $pull = $context->getSocket(ZMQ::SOCKET_PULL);
         $pull->bind('ipc://test.ipc');
 
-        $push = $context->getSocket(\ZMQ::SOCKET_PUSH);
+        $push = $context->getSocket(ZMQ::SOCKET_PUSH);
         $push->connect('ipc://test.ipc');
 
-        $msgs = array();
+        $messages = array();
 
-        $pull->on('message', function ($msg) use (&$msgs) {
-            $msgs[] = $msg;
+        $pull->on('message', function ($message) use (&$messages) {
+            $messages[] = $message;
         });
 
         $loop->addTimer(0.001, function () use ($push) {
@@ -35,10 +41,13 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
 
         $loop->run();
 
-        $this->assertSame(array('foo', 'bar', 'baz'), $msgs);
+        $this->assertSame(array('foo', 'bar', 'baz'), $messages);
     }
 
-    public function testDealerRep()
+    /**
+     * @test
+     */
+    public function dealerRep()
     {
         $pids[] = $this->forkRepWorker();
         $pids[] = $this->forkRepWorker();
@@ -46,15 +55,15 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $loop = new StreamSelectLoop();
         $context = new Context($loop);
 
-        $dealer = $context->getSocket(\ZMQ::SOCKET_DEALER);
+        $dealer = $context->getSocket(ZMQ::SOCKET_DEALER);
         $dealer->bind('ipc://test2.ipc');
 
         sleep(1);
 
-        $msgs = array();
+        $messages = array();
 
-        $dealer->on('messages', function ($msg) use (&$msgs) {
-            $msgs[] = $msg;
+        $dealer->on('messages', function ($message) use (&$messages) {
+            $messages[] = $message;
         });
 
         $dealer->send(array('A', '', 'foo'));
@@ -70,24 +79,27 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             pcntl_waitpid($pid, $status, WUNTRACED);
         }
 
-        $this->assertCount(2, $msgs);
-        $this->assertContains(array('A', '', 'foobar'), $msgs);
-        $this->assertContains(array('B', '', 'barbar'), $msgs);
+        $this->assertCount(2, $messages);
+        $this->assertContains(array('A', '', 'foobar'), $messages);
+        $this->assertContains(array('B', '', 'barbar'), $messages);
     }
 
-    private function forkRepWorker()
+    protected function forkRepWorker()
     {
         $pid = pcntl_fork();
+
         if ($pid != 0) {
             return $pid;
         }
 
-        $context = new \ZMQContext();
-        $rep = $context->getSocket(\ZMQ::SOCKET_REP);
+        $context = new ZMQContext();
+
+        $rep = $context->getSocket(ZMQ::SOCKET_REP);
         $rep->connect('ipc://test2.ipc');
 
-        $msg = $rep->recv();
-        $rep->send($msg.'bar');
+        $message = $rep->recv();
+
+        $rep->send($message . 'bar');
 
         exit;
     }
