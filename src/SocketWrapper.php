@@ -60,7 +60,7 @@ class SocketWrapper extends EventEmitter
 
     public function handleEvent()
     {
-        while (true) {
+        while ($this->socket !== null) {
             $events = $this->socket->getSockOpt(ZMQ::SOCKOPT_EVENTS);
 
             $isPollIn = $events & ZMQ::POLL_IN;
