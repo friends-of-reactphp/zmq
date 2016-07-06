@@ -17,10 +17,5 @@
         "psr-4": {
             "React\\ZMQ\\": "src"
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.4-dev"
-        }
     }
 }
