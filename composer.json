@@ -6,7 +6,7 @@
     "require": {
         "php": ">=5.4.0",
         "ext-zmq": "*",
-        "evenement/evenement": "~2.0",
+        "evenement/evenement": "^3.0 || ^2.0",
         "react/event-loop": "0.4.*"
     },
     "require-dev": {
