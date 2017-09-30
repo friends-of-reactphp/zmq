@@ -10,7 +10,8 @@ use ZMQSocket;
 /**
  * @mixin ZMQContext
  *
- * @method SocketWrapper getSocket
+ * @method SocketWrapper getSocket($type, $persistent_id = null, $on_new_socket = null)
+ * @see \ZmqContext::getSocket()
  */
 class Context
 {
