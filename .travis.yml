@@ -3,12 +3,19 @@ language: php
 php:
   - 5.4
   - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+  - nightly
+
+addons:
+  apt:
+    packages:
+      - libzmq-dev
 
 before_script:
-  - git clone https://github.com/mkoppanen/php-zmq.git
-  - sh -c "cd php-zmq && phpize && ./configure && make --silent && sudo make install"
-  - echo "extension=zmq.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
-  - composer self-update
+  - echo "yes" | pecl -d preferred_state=beta install zmq
   - composer install --dev
 
 script: phpunit --coverage-text
