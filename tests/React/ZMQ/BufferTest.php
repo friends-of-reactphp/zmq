@@ -2,9 +2,9 @@
 
 namespace React\ZMQ;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BufferTest extends PHPUnit_Framework_TestCase
+class BufferTest extends TestCase
 {
     /**
      * @test

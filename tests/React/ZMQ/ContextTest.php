@@ -2,10 +2,10 @@
 
 namespace React\ZMQ;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZMQ;
 
-class ContextTest extends PHPUnit_Framework_TestCase
+class ContextTest extends TestCase
 {
     /**
      * @test
