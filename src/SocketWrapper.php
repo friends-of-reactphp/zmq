@@ -33,7 +33,7 @@ class SocketWrapper extends EventEmitter
     protected $loop;
 
     /**
-     * @var Buffer
+     * @var Buffer|null
      */
     protected $buffer;
 
