@@ -23,7 +23,7 @@ class SocketWrapper extends EventEmitter
     public $closed = false;
 
     /**
-     * @var ZMQSocket
+     * @var ZMQSocket|null
      */
     protected $socket;
 
