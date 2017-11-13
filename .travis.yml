@@ -18,4 +18,4 @@ before_script:
   - echo "yes" | pecl -d preferred_state=beta install zmq
   - composer install --dev
 
-script: phpunit --coverage-text
+script: vendor/bin/phpunit --coverage-text
