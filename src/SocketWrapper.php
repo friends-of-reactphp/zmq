@@ -23,7 +23,7 @@ class SocketWrapper extends EventEmitter
     public $closed = false;
 
     /**
-     * @var ZMQSocket
+     * @var ZMQSocket|null
      */
     protected $socket;
 
@@ -33,7 +33,7 @@ class SocketWrapper extends EventEmitter
     protected $loop;
 
     /**
-     * @var Buffer
+     * @var Buffer|null
      */
     protected $buffer;
 
@@ -60,7 +60,7 @@ class SocketWrapper extends EventEmitter
 
     public function handleEvent()
     {
-        while ($this->socket !== null) {
+        while ($this->socket !== null && $this->buffer !== null) {
             $events = $this->socket->getSockOpt(ZMQ::SOCKOPT_EVENTS);
 
             $isPollIn = $events & ZMQ::POLL_IN;
@@ -124,7 +124,9 @@ class SocketWrapper extends EventEmitter
      */
     public function send($message)
     {
-        $this->buffer->send($message);
+        if($this->buffer !== null) {
+            $this->buffer->send($message);
+        }
     }
 
     public function close()
@@ -137,6 +139,7 @@ class SocketWrapper extends EventEmitter
         $this->loop->removeStream($this->fileDescriptor);
         $this->buffer->removeAllListeners();
         $this->removeAllListeners();
+        unset($this->buffer);
         unset($this->socket);
         $this->closed = true;
     }
