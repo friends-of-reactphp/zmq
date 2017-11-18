@@ -2,17 +2,17 @@
 
 namespace React\ZMQ;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use ZMQ;
 
-class SocketWrapperTest extends PHPUnit_Framework_TestCase
+class SocketWrapperTest extends TestCase
 {
     /**
      * @test
      */
     public function itShouldWrapARealZMQSocket()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $socket = $this->getMockBuilder('ZMQSocket')
             ->disableOriginalConstructor()
@@ -33,7 +33,7 @@ class SocketWrapperTest extends PHPUnit_Framework_TestCase
      */
     public function subscribeShouldSetSocketOption()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $socket = $this->getMockBuilder('ZMQSocket')
             ->disableOriginalConstructor()
@@ -54,7 +54,7 @@ class SocketWrapperTest extends PHPUnit_Framework_TestCase
      */
     public function unsubscribeShouldSetSocketOption()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $socket = $this->getMockBuilder('ZMQSocket')
             ->disableOriginalConstructor()
@@ -75,7 +75,7 @@ class SocketWrapperTest extends PHPUnit_Framework_TestCase
      */
     public function sendShouldBufferMessages()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())
@@ -102,7 +102,7 @@ class SocketWrapperTest extends PHPUnit_Framework_TestCase
      */
     public function closeShouldStopListening()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())

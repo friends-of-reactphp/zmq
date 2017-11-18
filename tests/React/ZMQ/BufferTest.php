@@ -2,16 +2,16 @@
 
 namespace React\ZMQ;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BufferTest extends PHPUnit_Framework_TestCase
+class BufferTest extends TestCase
 {
     /**
      * @test
      */
     public function sendShouldQueueMessages()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())
@@ -39,7 +39,7 @@ class BufferTest extends PHPUnit_Framework_TestCase
     {
         $writeListener = function () {};
 
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())
