@@ -12,7 +12,7 @@ class SocketWrapperTest extends TestCase
      */
     public function itShouldWrapARealZMQSocket()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $socket = $this->getMockBuilder('ZMQSocket')
             ->disableOriginalConstructor()
@@ -33,7 +33,7 @@ class SocketWrapperTest extends TestCase
      */
     public function subscribeShouldSetSocketOption()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $socket = $this->getMockBuilder('ZMQSocket')
             ->disableOriginalConstructor()
@@ -54,7 +54,7 @@ class SocketWrapperTest extends TestCase
      */
     public function unsubscribeShouldSetSocketOption()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $socket = $this->getMockBuilder('ZMQSocket')
             ->disableOriginalConstructor()
@@ -75,7 +75,7 @@ class SocketWrapperTest extends TestCase
      */
     public function sendShouldBufferMessages()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())
@@ -102,7 +102,7 @@ class SocketWrapperTest extends TestCase
      */
     public function closeShouldStopListening()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())

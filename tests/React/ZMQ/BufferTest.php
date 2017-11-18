@@ -11,7 +11,7 @@ class BufferTest extends TestCase
      */
     public function sendShouldQueueMessages()
     {
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())
@@ -39,7 +39,7 @@ class BufferTest extends TestCase
     {
         $writeListener = function () {};
 
-        $loop = $this->getMock('React\EventLoop\LoopInterface');
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
 
         $loop
             ->expects($this->once())
