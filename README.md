@@ -2,7 +2,7 @@
 
 ZeroMQ bindings for React.
 
-[![Build Status](https://secure.travis-ci.org/reactphp/zmq.png?branch=master)](http://travis-ci.org/reactphp/zmq) [![Code Climate](https://codeclimate.com/github/reactphp/zmq/badges/gpa.svg)](https://codeclimate.com/github/reactphp/zmq)
+[![Build Status](https://secure.travis-ci.org/friends-of-reactphp/zmq.png?branch=master)](http://travis-ci.org/friends-of-reactphp/zmq)
 
 ## Install
 
