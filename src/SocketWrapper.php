@@ -136,7 +136,8 @@ class SocketWrapper extends EventEmitter
         }
 
         $this->emit('end', array($this));
-        $this->loop->removeStream($this->fileDescriptor);
+        $this->loop->removeWriteStream($this->fileDescriptor);
+        $this->loop->removeReadStream($this->fileDescriptor);
         $this->buffer->removeAllListeners();
         $this->removeAllListeners();
         unset($this->buffer);

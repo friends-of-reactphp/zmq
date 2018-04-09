@@ -106,7 +106,12 @@ class SocketWrapperTest extends TestCase
 
         $loop
             ->expects($this->once())
-            ->method('removeStream')
+            ->method('removeReadStream')
+            ->with(14);
+
+        $loop
+            ->expects($this->once())
+            ->method('removeWriteStream')
             ->with(14);
 
         $socket = $this->getMockBuilder('ZMQSocket')
