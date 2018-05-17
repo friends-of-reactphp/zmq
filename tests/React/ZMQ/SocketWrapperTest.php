@@ -128,4 +128,27 @@ class SocketWrapperTest extends TestCase
 
         $wrapped->close();
     }
+
+
+    /**
+     * @test
+     */
+    public function closeShouldStopHandleEventLoop()
+    {
+
+        $loop = $this->getMockBuilder('React\EventLoop\LoopInterface')->getMock();
+
+        $socket = $this->getMockBuilder('ZMQSocket')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $socket
+            ->expects($this->exactly(1))
+            ->method('getSockOpt');
+
+        $wrapped = new SocketWrapper($socket, $loop);
+
+        $wrapped->close();
+        $wrapped->handleEvent();
+    }
 }
