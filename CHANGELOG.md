@@ -1,22 +1,35 @@
 CHANGELOG
 =========
 
-* 0.3.1 (2014-xx-xx)
+## 0.4.0 (2018-05-18)
 
-  * Change layout to PSR-4
+*   Forward compatibility with upcoming EventLoop v1.0 and v0.5
+    (#46 by @WyriHaximus, #53 and #54 by @edusalguero)
 
-* 0.3.0 (2014-05-25)
+*   Suport evenement 3.0 and 2.0
+    (#41 by @jsor)
 
-  * Bump to react 0.4
+*   Improve docblock for Zmq\Context
+    (#34 by @M1ke)
 
-* 0.2.0 (2013-09-18)
+*   Fixed only handling new events when there is an open socket in handleEvent
+    (#30 by @khelle, #49 and #50 by @edhelas, and #57 by @WyriHaximus)
 
-  * Bump to react 0.3
+*   Change layout to PSR-4
 
-* 0.1.1 (2012-11-18)
+## 0.3.0 (2014-05-25)
 
-  * Feature: Emit `messages` instead of `message` for multi-part receive
+*   Bump to react 0.4
 
-* 0.1.0 (2012-10-23)
+## 0.2.0 (2013-09-18)
 
-  * Bug fix: Resolve flaw in reading of edge-triggered events
+*   Bump to react 0.3
+
+## 0.1.1 (2012-11-18)
+
+*   Feature: Emit `messages` instead of `message` for multi-part receive
+
+## 0.1.0 (2012-10-23)
+
+*   Bug fix: Resolve flaw in reading of edge-triggered events
+
