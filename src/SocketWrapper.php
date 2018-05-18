@@ -25,7 +25,7 @@ class SocketWrapper extends EventEmitter
     /**
      * @var ZMQSocket|null
      */
-    protected $socket;
+    protected $socket = null;
 
     /**
      * @var LoopInterface
@@ -35,7 +35,7 @@ class SocketWrapper extends EventEmitter
     /**
      * @var Buffer|null
      */
-    protected $buffer;
+    protected $buffer = null;
 
     /**
      * @param ZMQSocket     $socket
@@ -140,8 +140,8 @@ class SocketWrapper extends EventEmitter
         $this->loop->removeReadStream($this->fileDescriptor);
         $this->buffer->removeAllListeners();
         $this->removeAllListeners();
-        unset($this->buffer);
-        unset($this->socket);
+        $this->buffer = null;
+        $this->socket = null;
         $this->closed = true;
     }
 
